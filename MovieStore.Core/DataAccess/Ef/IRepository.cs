@@ -13,6 +13,8 @@ namespace MovieStore.Core.DataAccess.Ef
     {
         Task<BaseResponse<T>> Get(Expression<Func<T, bool>> filter,params Expression<Func<T, object>>[]inculudes);
         Task<BaseResponse<List<T>>> GetList(Expression<Func<T, bool>> filter,params Expression<Func<T, object>>[]inculudes);
+        Task<BaseResponse<List<T>>> GetAll(params Expression<Func<T, object>>[] inculudes);
+
 
         Task<BaseResponse<T>> Update(T entity);
         Task<BaseResponse<T>> Delete(T entity);

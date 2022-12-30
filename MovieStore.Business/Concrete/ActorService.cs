@@ -6,10 +6,9 @@ using MovieStore.Core.Model.Request.Actor;
 using MovieStore.DataAccess.Abstract;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace MovieStore.Business.Concrete
 {
@@ -17,15 +16,19 @@ namespace MovieStore.Business.Concrete
     {
         private readonly IActorRepository _actorRepository;
         private readonly IMapper _mapper;
-        public ActorService(IActorRepository actorRepository,IMapper mapper)
+        public ActorService(IActorRepository actorRepository, IMapper mapper)
         {
             _actorRepository = actorRepository;
-            _mapper=mapper;
+            _mapper = mapper;
         }
 
         public Task<BaseResponse<Actor>> Create(ActorCreateRequest actorCreateRequest)
         {
-            Actor actor = _mapper.Map<Actor>(actorCreateRequest);
+            //Actor actor = _mapper.Map<Actor>(actorCreateRequest);
+
+            Actor actor = new Actor();
+            actor.Name = actorCreateRequest.Name;
+            actor.Surname = actorCreateRequest.Surname;
             return _actorRepository.Create(actor);
         }
 
@@ -41,12 +44,16 @@ namespace MovieStore.Business.Concrete
 
         }
 
-        public async Task<BaseResponse<List<Actor>>> GetAll(Expression<Func<Actor, bool>> filter)
+        public async Task<BaseResponse<List<Actor>>> GetAllByFilter(Expression<Func<Actor, bool>> filter)
         {
             return await _actorRepository.GetList(filter);
         }
+        public async Task<BaseResponse<List<Actor>>> Getlist()
+        {
+            return await _actorRepository.GetAll();
+        }
 
-        public Task<BaseResponse<Actor>> Update(ActorUpdateRequest actorUpdateRequest)
+        public Task<BaseResponse<Actor>> Update(ActorUpdateRequest actorUpdateRequest) ///????
         {
             Actor actor = _mapper.Map<Actor>(actorUpdateRequest);
             return _actorRepository.Update(actor);

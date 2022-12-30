@@ -86,6 +86,39 @@ namespace MovieStore.Core.DataAccess.Ef
             }
         }
 
+        public async Task<BaseResponse<List<TEntity>>> GetAll(params Expression<Func<TEntity, object>>[] inculudes)
+        {
+            try
+            {
+                IQueryable<TEntity> query = _context.Set<TEntity>();
+                if (inculudes.Length > 0)
+                {
+                    foreach (var item in inculudes)
+                    {
+                        query = query.Include(item);
+                    }
+                }
+            
+
+                var result = await query.AsNoTracking().ToListAsync();
+
+                if (result == null)
+                {
+                    return new BaseResponse<List<TEntity>>() { Status = false, Data = null, ErrorMessage = "ilgili sorguya ait kayıt bulunamadı!" };
+                }
+                else
+                {
+                    return new BaseResponse<List<TEntity>>() { Status = true, Data = result };
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<List<TEntity>>() { Status = false, Data = null, ErrorMessage = ex.ToString() };
+
+            }
+        }
+
         public async Task<BaseResponse<List<TEntity>>> GetList(Expression<Func<TEntity, bool>> filter, params Expression<Func<TEntity, object>>[] inculudes)
         {
             try

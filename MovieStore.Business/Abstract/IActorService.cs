@@ -16,6 +16,8 @@ namespace MovieStore.Business.Abstract
         Task<BaseResponse<Actor>> Update(ActorUpdateRequest actorUpdateRequest);
         Task<BaseResponse<Actor>> Delete(int Id);
         Task<BaseResponse<Actor>> Get(Expression<Func<Actor, bool>> filter);
-        Task<BaseResponse<Actor>> GetAll(Expression<Func<Actor, bool>> filter);
+        Task<BaseResponse<List<Actor>>> GetAllByFilter(Expression<Func<Actor, bool>> filter);
+        //Task<BaseResponse<Actor>> GetList(Expression<Func<Actor, bool>> filter);
+        Task<BaseResponse<List<Actor>>> Getlist();
     }
 }

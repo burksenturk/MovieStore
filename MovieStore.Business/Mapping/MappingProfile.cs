@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MovieStore.Core.Entity;
 using MovieStore.Core.Model.Request.Actor;
+using MovieStore.Core.Model.Request.Movie;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,10 @@ namespace MovieStore.Business.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Actor, ActorCreateRequest>();
-            CreateMap<Actor, ActorUpdateRequest>();
+            CreateMap<ActorCreateRequest, Actor>(); // elindeki,hedef
+            CreateMap<ActorUpdateRequest, Actor>();
+            CreateMap<MovieCreateRequest, Movie>(); // elindeki,hedef
+            CreateMap<MovieUpdateRequest, Movie>();
         }
     }
 }
