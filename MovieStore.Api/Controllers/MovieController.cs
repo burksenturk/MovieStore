@@ -52,7 +52,7 @@ namespace MovieStore.Api.Controllers
         [HttpGet("getbyname")]
         public async Task<IActionResult> Get(string name)
         {
-            return Ok(await _movieService.Get(x => x.Name == name && x.IsActive, x => x.Type));   //getallbyfilter kullansak?  önceki hali Get ti.
+            return Ok(await _movieService.Get(x => x.Name == name && x.IsActive, x => x.Type));  
         }
 
         [HttpGet("getall")]

@@ -3,7 +3,9 @@ using MovieStore.Business.Abstract;
 using MovieStore.Core.Entity;
 using MovieStore.Core.Model;
 using MovieStore.Core.Model.Request.Actor;
+using MovieStore.Core.Model.Request.Order;
 using MovieStore.DataAccess.Abstract;
+using MovieStore.DataAccess.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -22,14 +24,12 @@ namespace MovieStore.Business.Concrete
             _mapper = mapper;
         }
 
-        public Task<BaseResponse<Actor>> Create(ActorCreateRequest actorCreateRequest)
+        public async Task<BaseResponse<Actor>> Create(ActorCreateRequest actorCreateRequest)
         {
-            //Actor actor = _mapper.Map<Actor>(actorCreateRequest);
+            Actor actor = _mapper.Map<Actor>(actorCreateRequest);
+            var resultActor = await _actorRepository.Create(actor);
 
-            Actor actor = new Actor();
-            actor.Name = actorCreateRequest.Name;
-            actor.Surname = actorCreateRequest.Surname;
-            return _actorRepository.Create(actor);
+            return resultActor;
         }
 
         public async Task<BaseResponse<Actor>> Delete(int Id)

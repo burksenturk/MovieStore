@@ -66,6 +66,9 @@ namespace MovieStore.Api
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
 
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
             services.AddScoped<IMovieActorRepository, MovieActorRepository>();
         }
 

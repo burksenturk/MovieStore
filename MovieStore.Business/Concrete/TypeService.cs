@@ -1,7 +1,7 @@
 ﻿using MovieStore.Business.Abstract;
 using MovieStore.Core.Entity;
 using MovieStore.Core.Model;
-using MovieStore.Core.Model.Request.Director;
+using MovieStore.Core.Model.Request.Type;
 using MovieStore.Core.Model.Request.Type;
 using MovieStore.DataAccess.Abstract;
 using MovieStore.DataAccess.Concrete;
@@ -11,23 +11,28 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace MovieStore.Business.Concrete
 {
     public class TypeService : ITypeService
     {
         private readonly ITypeRepository _typeRepository;
+        private readonly IMapper _mapper;
 
-        public TypeService(ITypeRepository typeRepository)
+        public TypeService(ITypeRepository typeRepository, IMapper mapper)
         {
             _typeRepository = typeRepository;
+            _mapper = mapper;
         }
 
-        public Task<BaseResponse<Core.Entity.Type>> Create(TypeCreateRequest typeCreateRequest)
+        public async Task<BaseResponse<Core.Entity.Type>> Create(TypeCreateRequest typeCreateRequest)
         {
-            Core.Entity.Type type = new Core.Entity.Type();
-            type.Name = typeCreateRequest.Name;
-            return _typeRepository.Create(type);
+            //Core.Entity.Type();
+            Core.Entity.Type type = _mapper.Map<Core.Entity.Type>(typeCreateRequest);
+            var resultType = await _typeRepository.Create(type);
+
+            return resultType;
 
         }
 
@@ -54,8 +59,7 @@ namespace MovieStore.Business.Concrete
 
         public Task<BaseResponse<Core.Entity.Type>> Update(TypeUpdateRequest typeUpdateRequest)
         {
-            Core.Entity.Type type = new Core.Entity.Type();
-            type.Name = typeUpdateRequest.Name;
+            Core.Entity.Type type = _mapper.Map<Core.Entity.Type>(typeUpdateRequest);
             return _typeRepository.Update(type);
 
         }

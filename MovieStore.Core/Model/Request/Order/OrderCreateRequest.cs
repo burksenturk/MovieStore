@@ -8,5 +8,8 @@ namespace MovieStore.Core.Model.Request.Order
 {
     public class OrderCreateRequest
     {
+        public int CustomerId { get; set; }
+        public int MovieId { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

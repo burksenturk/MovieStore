@@ -1,8 +1,10 @@
-﻿using MovieStore.Business.Abstract;
+﻿using AutoMapper;
+using MovieStore.Business.Abstract;
 using MovieStore.Core.Entity;
 using MovieStore.Core.Model;
 using MovieStore.Core.Model.Request.Director;
 using MovieStore.Core.Model.Request.Director;
+
 using MovieStore.DataAccess.Abstract;
 using MovieStore.DataAccess.Concrete;
 using System;
@@ -18,16 +20,18 @@ namespace MovieStore.Business.Concrete
     public class DirectorService : IDirectorService
     {
         private readonly IDirectorRepository _directorRepository;
-        public DirectorService(IDirectorRepository directorRepository)
+        private readonly IMapper _mapper;
+        public DirectorService(IDirectorRepository directorRepository, IMapper mapper)
         {
             _directorRepository = directorRepository;
+            _mapper = mapper;
         }
-        public Task<BaseResponse<Director>> Create(DirectorCreateRequest directorCreateRequest)
+        public async Task<BaseResponse<Director>> Create(DirectorCreateRequest directorCreateRequest)
         {
-            Director director = new Director();
-            director.Name = directorCreateRequest.Name;
-            director.Surname = directorCreateRequest.Surname;
-            return _directorRepository.Create(director);
+            Director director = _mapper.Map<Director>(directorCreateRequest);
+            var resultDirector = await _directorRepository.Create(director);
+
+            return resultDirector;
         }
 
         public async Task<BaseResponse<Director>> Delete(int Id)
@@ -54,12 +58,9 @@ namespace MovieStore.Business.Concrete
 
         public  Task<BaseResponse<Director>> Update(DirectorUpdateRequest directorUpdateRequest)  //?????????
         {
-            
 
-            Director director = new Director();            
-            director.Name = directorUpdateRequest.Name;
-            director.Surname = directorUpdateRequest.Surname;
-            return  _directorRepository.Update(director);
+            Director director = _mapper.Map<Director>(directorUpdateRequest);
+            return _directorRepository.Update(director);
 
         }
     }
