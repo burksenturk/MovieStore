@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MovieStore.Business.Abstract;
+using MovieStore.Business.Validation;
 using MovieStore.Core.Entity;
 using MovieStore.Core.Model;
 using MovieStore.Core.Model.Request.Actor;
@@ -27,6 +29,8 @@ namespace MovieStore.Business.Concrete
         public async Task<BaseResponse<Actor>> Create(ActorCreateRequest actorCreateRequest)
         {
             Actor actor = _mapper.Map<Actor>(actorCreateRequest);
+            //ActorCreateRequestValidator validator = new ActorCreateRequestValidator();
+            //validator.ValidateAndThrow(actor);
             var resultActor = await _actorRepository.Create(actor);
 
             return resultActor;

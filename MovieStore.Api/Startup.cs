@@ -70,6 +70,7 @@ namespace MovieStore.Api
             services.AddScoped<IOrderRepository, OrderRepository>();
 
             services.AddScoped<IMovieActorRepository, MovieActorRepository>();
+            services.AddScoped<IMovieDirectorRepository, MovieDirectorRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

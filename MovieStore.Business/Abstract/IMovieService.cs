@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using MovieStore.Core.Model.Request.Movie;
+using MovieStore.Core.Model.ViewModels;
 
 namespace MovieStore.Business.Abstract
 {
@@ -20,5 +21,6 @@ namespace MovieStore.Business.Abstract
         Task<BaseResponse<List<Movie>>> GetAllByFilter(Expression<Func<Movie, bool>> filter, params Expression<Func<Movie, object>>[] inculudes);
         //Task<BaseResponse<Movie>> GetList(Expression<Func<Movie, bool>> filter);
         Task<BaseResponse<List<Movie>>> Getlist(params Expression<Func<Movie, object>>[] inculudes);
+        Task<BaseResponse<MovieDetailViewModel>> GetDetail(int Id);
     }
 }

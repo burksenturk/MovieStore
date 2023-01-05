@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using MovieStore.Business.Abstract;
+using MovieStore.Core.Model.ViewModels;
 
 namespace MovieStore.Business.Concrete
 {
@@ -17,12 +18,14 @@ namespace MovieStore.Business.Concrete
     {
         private readonly IMovieRepository _movieRepository;
         private readonly IMovieActorRepository _movieActorRepository;
+        private readonly IMovieDirectorRepository _movieDirectorRepository;
         private readonly IMapper _mapper;
-        public MovieService(IMovieRepository movieRepository, IMovieActorRepository movieActorRepository,IMapper mapper)
+        public MovieService(IMovieRepository movieRepository, IMovieActorRepository movieActorRepository, IMapper mapper, IMovieDirectorRepository movieDirectorRepository)
         {
             _movieRepository = movieRepository;
             _mapper = mapper;
-            _movieActorRepository= movieActorRepository;
+            _movieActorRepository = movieActorRepository;
+            _movieDirectorRepository = movieDirectorRepository;
         }
 
         public async Task<BaseResponse<Movie>> Create(MovieCreateRequest movieCreateRequest)
@@ -36,6 +39,12 @@ namespace MovieStore.Business.Concrete
                 {
                     var movieActor = new MovieActor() { ActorId = actorId, MovieId = movie.Id };
                     await _movieActorRepository.Create(movieActor);
+                }
+
+                foreach (var directorId in movieCreateRequest.DirectorIdList)
+                {
+                    var movieDirector = new MovieDirector() { DirectorId = directorId, MovieId = movie.Id };
+                    await _movieDirectorRepository.Create(movieDirector);
                 }
             }
             return resultMovie;
@@ -66,6 +75,25 @@ namespace MovieStore.Business.Concrete
         {
             Movie movie = _mapper.Map<Movie>(movieUpdateRequest);
             return _movieRepository.Update(movie);
+        }
+
+        public async Task<BaseResponse<MovieDetailViewModel>> GetDetail(int Id)
+        {
+            MovieDetailViewModel movieDetailViewModel = new MovieDetailViewModel();
+            var movieResult= await _movieRepository.Get(x => x.Id == Id && x.IsActive, y => y.Type);
+            var movieActorList =await  _movieActorRepository.GetList(x=>x.MovieId==Id,x=>x.Actor);
+            var movieDirectorList = await _movieDirectorRepository.GetList(x=>x.MovieId==Id,x=>x.Director);
+
+
+
+
+
+            movieDetailViewModel.Movie = movieResult.Data;
+            movieDetailViewModel.Actors=movieActorList.Data.Select(x=>x.Actor).ToList();
+            movieDetailViewModel.Directors=movieDirectorList.Data.Select(x=>x.Director).ToList();
+
+            return new BaseResponse<MovieDetailViewModel>() { Status=true,Data = movieDetailViewModel,ErrorMessage=" "};
+
         }
     }
 }

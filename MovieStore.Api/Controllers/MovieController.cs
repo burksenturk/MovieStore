@@ -61,6 +61,13 @@ namespace MovieStore.Api.Controllers
             return Ok(await _movieService.GetAllByFilter(x=>x.IsActive, x => x.Type));
         }
 
+        [HttpGet("getdetail")]
+        public async Task<IActionResult> GetDetail(int Id)
+        {
+            return Ok(await _movieService.GetDetail(Id));
+        }
+
+
     }
 }
 

@@ -14,5 +14,6 @@ namespace MovieStore.Core.Model.Request.Movie
         public decimal Price { get; set; }
 
         public List<int> ActorIdList { get; set; }   //yaparken tam amacımız neydi
+        public List<int> DirectorIdList { get; set; }
     }
 }
