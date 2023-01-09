@@ -1,69 +1,69 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
-using System.Net;
-using System.Threading.Tasks;
+﻿//using Microsoft.AspNetCore.Builder;
+//using Microsoft.AspNetCore.Http;
+//using Newtonsoft.Json;
+//using System;
+//using System.Diagnostics;
+//using System.Net;
+//using System.Threading.Tasks;
 
-namespace MovieStore.Api.Middlewares
-{
-    public class CustomExceptionMiddleware
-    {
-        private readonly ILoggerService _LoggerService;
-        private readonly RequestDelegate _next;
-        public CustomExceptionMiddleware(RequestDelegate next, ILoggerService loggerService)
-        {
-            _next = next;
-            _LoggerService = loggerService;
-        }
+//namespace MovieStore.Api.Middlewares
+//{
+//    public class CustomExceptionMiddleware
+//    {
+//        private readonly ILoggerService _LoggerService;
+//        private readonly RequestDelegate _next;
+//        public CustomExceptionMiddleware(RequestDelegate next, ILoggerService loggerService)
+//        {
+//            _next = next;
+//            _LoggerService = loggerService;
+//        }
 
-        public async Task Invoke(HttpContext context)
-        {
-            var watch = Stopwatch.StartNew();
-            try
-            {
-                string message = "[Request] HTTP" + context.Request.Method + " - " + context.Request.Path;
-                _LoggerService.Write(message);
+//        public async Task Invoke(HttpContext context)
+//        {
+//            var watch = Stopwatch.StartNew();
+//            try
+//            {
+//                string message = "[Request] HTTP" + context.Request.Method + " - " + context.Request.Path;
+//                _LoggerService.Write(message);
 
-                await _next(context);
-                watch.Stop();
+//                await _next(context);
+//                watch.Stop();
 
-                message = "[Response] HTTP" + context.Request.Method + " - " + context.Request.Path + " responded " + context.Response.StatusCode + " in " + watch.Elapsed.TotalMilliseconds + " ms ";
+//                message = "[Response] HTTP" + context.Request.Method + " - " + context.Request.Path + " responded " + context.Response.StatusCode + " in " + watch.Elapsed.TotalMilliseconds + " ms ";
 
-                _LoggerService.Write(message);
+//                _LoggerService.Write(message);
 
-            }
-            catch (Exception ex)
-            {
+//            }
+//            catch (Exception ex)
+//            {
 
-                watch.Stop();
+//                watch.Stop();
 
-                await HandleException(context, ex, watch);
+//                await HandleException(context, ex, watch);
 
-            }
-        }
+//            }
+//        }
 
-        private Task HandleException(HttpContext context, Exception ex, Stopwatch watch)
-        {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+//        private Task HandleException(HttpContext context, Exception ex, Stopwatch watch)
+//        {
+//            context.Response.ContentType = "application/json";
+//            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            string message = "[Error] HTTP" + context.Request.Method + " - " + context.Response.StatusCode + " Error Message " + ex.Message + "in" + watch.Elapsed.TotalMilliseconds + "ms";
-            _LoggerService.Write(message);
+//            string message = "[Error] HTTP" + context.Request.Method + " - " + context.Response.StatusCode + " Error Message " + ex.Message + "in" + watch.Elapsed.TotalMilliseconds + "ms";
+//            _LoggerService.Write(message);
 
-            var result = JsonConvert.SerializeObject(new { error = ex.Message }, Formatting.None);
-            return context.Response.WriteAsync(result);
+//            var result = JsonConvert.SerializeObject(new { error = ex.Message }, Formatting.None);
+//            return context.Response.WriteAsync(result);
 
 
-        }
-    }
+//        }
+//    }
 
-    public static class CustomExceptionMiddlewareExtension
-    {
-        public static IApplicationBuilder UseCustomExceptionMiddle(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<CustomExceptionMiddleware>();
-        }
-    }
-}
+//    public static class CustomExceptionMiddlewareExtension
+//    {
+//        public static IApplicationBuilder UseCustomExceptionMiddle(this IApplicationBuilder builder)
+//        {
+//            return builder.UseMiddleware<CustomExceptionMiddleware>();
+//        }
+//    }
+//}

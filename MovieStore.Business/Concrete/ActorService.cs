@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using MovieStore.Business.Abstract;
-using MovieStore.Business.Validation;
 using MovieStore.Core.Entity;
 using MovieStore.Core.Model;
 using MovieStore.Core.Model.Request.Actor;
-using MovieStore.Core.Model.Request.Order;
 using MovieStore.DataAccess.Abstract;
-using MovieStore.DataAccess.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -29,8 +25,6 @@ namespace MovieStore.Business.Concrete
         public async Task<BaseResponse<Actor>> Create(ActorCreateRequest actorCreateRequest)
         {
             Actor actor = _mapper.Map<Actor>(actorCreateRequest);
-            //ActorCreateRequestValidator validator = new ActorCreateRequestValidator();
-            //validator.ValidateAndThrow(actor);
             var resultActor = await _actorRepository.Create(actor);
 
             return resultActor;
@@ -57,7 +51,7 @@ namespace MovieStore.Business.Concrete
             return await _actorRepository.GetAll();
         }
 
-        public Task<BaseResponse<Actor>> Update(ActorUpdateRequest actorUpdateRequest) ///????
+        public Task<BaseResponse<Actor>> Update(ActorUpdateRequest actorUpdateRequest) 
         {
             Actor actor = _mapper.Map<Actor>(actorUpdateRequest);
             return _actorRepository.Update(actor);

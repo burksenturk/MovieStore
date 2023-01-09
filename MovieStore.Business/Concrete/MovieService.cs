@@ -85,9 +85,6 @@ namespace MovieStore.Business.Concrete
             var movieDirectorList = await _movieDirectorRepository.GetList(x=>x.MovieId==Id,x=>x.Director);
 
 
-
-
-
             movieDetailViewModel.Movie = movieResult.Data;
             movieDetailViewModel.Actors=movieActorList.Data.Select(x=>x.Actor).ToList();
             movieDetailViewModel.Directors=movieDirectorList.Data.Select(x=>x.Director).ToList();

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MovieStore.Core.Model.Request.Actor;
+using MovieStore.Core.Model.Request.Movie;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,16 @@ using System.Threading.Tasks;
 
 namespace MovieStore.Business.Validation
 {
-    public class ActorCreateRequestValidator : AbstractValidator<ActorCreateRequest>
+    public class MovieCreateRequestValidator : AbstractValidator<MovieCreateRequest>
     {
-        public ActorCreateRequestValidator()
+        public MovieCreateRequestValidator()
         {
             RuleFor(create => create.Name).NotEmpty().MinimumLength(3);
-            RuleFor(create => create.Surname).NotEmpty().MinimumLength(3);
-
+            RuleFor(create => create.Price).NotEmpty().GreaterThan(0);
 
         }
 
-            
+
 
     }
 }

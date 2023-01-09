@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieStore.Business.Abstract;
+using MovieStore.Business.Validation;
+using MovieStore.Core.Model;
 using MovieStore.Core.Model.Request.Customer;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MovieStore.Api.Controllers
@@ -20,9 +24,15 @@ namespace MovieStore.Api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(CustomerCreateRequest customerCreateRequest)
         {
-            if (!ModelState.IsValid)
+            CustomerCreateRequestValidator validator = new CustomerCreateRequestValidator();
+            var validateResult = validator.Validate(customerCreateRequest);
+            if (!validateResult.IsValid)
             {
-                return BadRequest("Model Error");
+                BaseResponse<List<string>> result = new BaseResponse<List<string>>();
+                result.Status = false;
+                result.ErrorMessage = "Hata";
+                result.Data = validateResult.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(result);
             }
 
             return Ok(await _customerService.Create(customerCreateRequest));

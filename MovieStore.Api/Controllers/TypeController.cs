@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MovieStore.Business.Abstract;
-using MovieStore.Business.Concrete;
+using MovieStore.Business.Validation;
+using MovieStore.Core.Model;
 using MovieStore.Core.Model.Request.Type;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MovieStore.Api.Controllers
 {
@@ -21,9 +23,15 @@ namespace MovieStore.Api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(TypeCreateRequest typeCreateRequest)
         {
-            if (!ModelState.IsValid)
+            TypeCreateRequestValidator validator = new TypeCreateRequestValidator();
+            var validateResult = validator.Validate(typeCreateRequest);
+            if (!validateResult.IsValid)
             {
-                return BadRequest("Model Error");
+                BaseResponse<List<string>> result = new BaseResponse<List<string>>();
+                result.Status = false;
+                result.ErrorMessage = "Hata";
+                result.Data = validateResult.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(result);
             }
 
             return Ok(await _typeService.Create(typeCreateRequest));
@@ -31,9 +39,15 @@ namespace MovieStore.Api.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> Update(TypeUpdateRequest typeUpdateRequest)
         {
-            if (!ModelState.IsValid)
+            TypeUpdateRequestValidator validator = new TypeUpdateRequestValidator();
+            var validateResult = validator.Validate(typeUpdateRequest);
+            if (!validateResult.IsValid)
             {
-                return BadRequest("Model Error");
+                BaseResponse<List<string>> result = new BaseResponse<List<string>>();
+                result.Status = false;
+                result.ErrorMessage = "Hata";
+                result.Data = validateResult.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(result);
             }
 
             return Ok(await _typeService.Update(typeUpdateRequest));

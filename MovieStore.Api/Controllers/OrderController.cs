@@ -1,9 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieStore.Business.Abstract;
+using MovieStore.Business.Concrete;
+using MovieStore.Business.Validation;
+using MovieStore.Core.Model.Request.Movie;
+using MovieStore.Core.Model;
 using MovieStore.Core.Model.Request.Order;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MovieStore.Api.Controllers
 {
@@ -21,9 +27,15 @@ namespace MovieStore.Api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(OrderCreateRequest orderCreateRequest)
         {
-            if (!ModelState.IsValid)
+            OrderCreateRequestValidator validator = new OrderCreateRequestValidator();
+            var validateResult = validator.Validate(orderCreateRequest);
+            if (!validateResult.IsValid)
             {
-                return BadRequest("Model Error");
+                BaseResponse<List<string>> result = new BaseResponse<List<string>>();
+                result.Status = false;
+                result.ErrorMessage = "Hata";
+                result.Data = validateResult.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(result);
             }
 
             return Ok(await _orderService.Create(orderCreateRequest));
@@ -31,9 +43,15 @@ namespace MovieStore.Api.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> Update(OrderUpdateRequest orderUpdateRequest)
         {
-            if (!ModelState.IsValid)
+            OrderUpdateRequestValidator validator = new OrderUpdateRequestValidator();
+            var validateResult = validator.Validate(orderUpdateRequest);
+            if (!validateResult.IsValid)
             {
-                return BadRequest("Model Error");
+                BaseResponse<List<string>> result = new BaseResponse<List<string>>();
+                result.Status = false;
+                result.ErrorMessage = "Hata";
+                result.Data = validateResult.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(result);
             }
 
             return Ok(await _orderService.Update(orderUpdateRequest));

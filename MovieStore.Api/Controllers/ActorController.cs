@@ -43,12 +43,24 @@ namespace MovieStore.Api.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> Update(ActorUpdateRequest actorUpdateRequest)
         {
-            if (!ModelState.IsValid)
+            ActorUpdateRequestValidator validator = new ActorUpdateRequestValidator();
+            var validateResult = validator.Validate(actorUpdateRequest);
+            if (!validateResult.IsValid)
             {
-                return BadRequest("Model Error");
+                BaseResponse<List<string>> result = new BaseResponse<List<string>>();
+                result.Status = false;
+                result.ErrorMessage = "Hata";
+                result.Data = validateResult.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(result);
             }
 
             return Ok(await _actorService.Update(actorUpdateRequest));
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest("Model Error");
+            //}
+
+            //return Ok(await _actorService.Update(actorUpdateRequest));
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int Id)
