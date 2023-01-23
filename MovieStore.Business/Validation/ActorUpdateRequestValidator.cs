@@ -8,9 +8,9 @@ namespace MovieStore.Business.Validation
     {
         public ActorUpdateRequestValidator()
         {
-            RuleFor(create => create.Id).NotEmpty().GreaterThan(0);
-            RuleFor(create => create.Name).NotEmpty().MinimumLength(3);
-            RuleFor(create => create.Surname).NotEmpty().MinimumLength(3);
+            RuleFor(update => update.Id).NotEmpty().GreaterThan(0);
+            RuleFor(update => update.Name).NotEmpty().MinimumLength(3);
+            RuleFor(update => update.Surname).NotEmpty().MinimumLength(3);
         }
 
     }

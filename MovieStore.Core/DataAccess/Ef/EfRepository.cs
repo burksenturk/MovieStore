@@ -53,7 +53,7 @@ namespace MovieStore.Core.DataAccess.Ef
 
             }
         }
-                                                                  // classlar:movie order vs..(filter) , classların objesi movie nin Price ı gibi(includes)
+                                                                  
         public async Task<BaseResponse<TEntity>> Get(Expression<Func<TEntity, bool>> filter, params Expression<Func<TEntity, object>>[] inculudes)
         {
             try

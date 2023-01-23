@@ -24,7 +24,7 @@ namespace MovieStore.DataAccess.Concrete.Ef.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<MovieActor> MovieActor { get; set; }
         public DbSet<MovieDirector> MovieDirector { get; set; }
-        public DbSet<CustomerFavoriteType> CustomerFavoriteTypes { get; set; }  //isim çoğul olayı? düzelttim
+        public DbSet<CustomerFavoriteType> CustomerFavoriteTypes { get; set; }  
         public DbSet< Core.Entity.Type> Types { get; set; }
 
     }
